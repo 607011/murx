@@ -1,0 +1,12 @@
+.ALLOC 1024 ; allocate 1024 memory cells
+.ORIG
+    MV R1 #10 ; this is a comment
+    MV R2 #20
+    ADD R3 R1 R2
+    
+    HALT
+
+; the following bytes are copied to the beginning of the memory
+LABEL:
+    .DATA $deca $fbad !1010101001010101 #12345
+    .STRING "gnarly foo bar baz"
