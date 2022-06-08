@@ -1,46 +1,61 @@
+\documentclass[10pt,a4paper]{scrartcl}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\frenchspacing
+\linespread{1.2}
+\usepackage[a4paper, lmargin=0.1666\paperwidth, rmargin=0.1666\paperwidth, tmargin=0.1111\paperheight, bmargin=0.1111\paperheight]{geometry} %margins
 \newcommand{\code}[1]{\texttt{#1}}
+\title{Murx}
+\subtitle{Virtual Machine and Assembler}
+\author{Oliver Lau}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Introduction}
 
+\subsection*{Specification}
 
-\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
     \hline
-    - & \multicolumn{24}{|c|}{Byte} \\ \hline
-    - & \multicolumn{8}{|c|}{1} & \multicolumn{8}{|c|}{2} & \multicolumn{8}{|c|}{1} \\ \hline 
-    - & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    Mnemonic & \multicolumn{24}{|l|}{Operands} \\ \hline
-    \code{MV R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{MV R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    & \multicolumn{32}{|c|}{Byte} \\ \hline
+    & \multicolumn{8}{|c|}{0} & \multicolumn{8}{|c|}{1} & \multicolumn{8}{|c|}{2} & \multicolumn{8}{|c|}{3} \\ \hline 
+    & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
+    \textbf{Mnemonic} & \multicolumn{32}{|l|}{\textbf{Operands}} \\ \hline
+    \code{MV R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} & \multicolumn{16}{|l|}{} \\ \hline
+    \code{MV R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{MV R mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{Address} \\ \hline
     \code{MV mem R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{16}{|l|}{address} & \multicolumn{8}{|l|}{source register} \\ \hline
     \code{XCHG R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
     \code{ADD R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{ADD R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{ADD R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{ADD R mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{address} \\ \hline
     \code{SUB R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{SUB R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{SUB R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{SUB R mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{address} \\ \hline
     \code{MUL R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{MUL R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{MUL R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{MUL R mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{address} \\ \hline
     \code{DIV R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{DIV R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{DIV R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{DIV R mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{address} \\ \hline
     \code{XOR R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{XOR R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{XOR R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{XOR R mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{address} \\ \hline
     \code{AND R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{AND R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{AND R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{AND R mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{address} \\ \hline
     \code{OR R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{OR R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{OR R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{OR R mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{address} \\ \hline
     \code{NOT R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{register} & \multicolumn{20}{|l|}{-} \\ \hline
     \code{NOT mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{16}{|l|}{address} & \multicolumn{8}{|l|}{-} \\ \hline
     \code{SHR R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{SHR R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{SHR R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{SHL R R}  & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{SHL R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{SHL R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{CMP R R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{source register} \\ \hline
-    \code{CMP R #imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
+    \code{CMP R \#imm} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{value} \\ \hline
     \code{CMR R mem} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{destination register} & \multicolumn{4}{|l|}{-} & \multicolumn{16}{|l|}{address} \\ \hline
     \code{BE label} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{16}{|l|}{address} & \multicolumn{8}{|l|}{-} \\ \hline
     \code{BNE label} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{16}{|l|}{address} & \multicolumn{8}{|l|}{-} \\ \hline
@@ -56,3 +71,5 @@
     \code{GETC R} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{4}{|l|}{register} & \multicolumn{20}{|l|}{-} \\ \hline
     \code{HALT} & \multicolumn{8}{|l|}{Opcode} & \multicolumn{24}{|l|}{-} \\ \hline
 \end{tabular}
+
+\end{document}
